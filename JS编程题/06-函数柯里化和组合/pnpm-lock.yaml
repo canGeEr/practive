@@ -1,0 +1,14 @@
+lockfileVersion: '6.0'
+
+dependencies:
+  lodash:
+    specifier: ^4.17.21
+    version: mirrors.tencent.com/lodash@4.17.21
+
+packages:
+
+  mirrors.tencent.com/lodash@4.17.21:
+    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==, registry: https://mirrors.cloud.tencent.com/npm/, tarball: https://mirrors.tencent.com/npm/lodash/-/lodash-4.17.21.tgz}
+    name: lodash
+    version: 4.17.21
+    dev: false
