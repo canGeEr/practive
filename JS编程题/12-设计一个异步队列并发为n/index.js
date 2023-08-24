@@ -31,38 +31,40 @@ class TaskPool {
   }
 }
 
-const taskPool = new TaskPool(2);
+// const taskPool = new TaskPool(2);
 
-function sleepConsole(n) {
-  return () =>
-    sleep(n).then((res) => {
-      console.log(res);
-    });
-}
+// function sleepConsole(n) {
+//   return () =>
+//     sleep(n).then((res) => {
+//       console.log(res);
+//     });
+// }
 
-const test = [
-  // [sleepConsole(3), sleepConsole(3), sleepConsole(3), sleepConsole(1)],
-  [
-    sleepConsole(1),
-    sleepConsole(2),
-    sleepConsole(3),
-    sleepConsole(1),
-    sleepConsole(2),
-  ],
-];
+// const test = [
+//   // [sleepConsole(3), sleepConsole(3), sleepConsole(3), sleepConsole(1)],
+//   [
+//     sleepConsole(1),
+//     sleepConsole(2),
+//     sleepConsole(3),
+//     sleepConsole(1),
+//     sleepConsole(2),
+//   ],
+// ];
 
 // console.log(
 //   test.map((item) => item.map((asyncTask) => taskPool.add(asyncTask)))
 // );
 
-for (let i = 0; i < 10; i++) {
-  const task = () =>
-    new Promise((resolve) => {
-      // 这里 i 的值也是以前非常高频的闭包题哦
-      setTimeout(() => {
-        console.log(`task${i} complete`);
-        resolve(`task${i}`);
-      }, 2000);
-    });
-  taskPool.add(task);
-}
+// for (let i = 0; i < 10; i++) {
+//   const task = () =>
+//     new Promise((resolve) => {
+//       // 这里 i 的值也是以前非常高频的闭包题哦
+//       setTimeout(() => {
+//         console.log(`task${i} complete`);
+//         resolve(`task${i}`);
+//       }, 2000);
+//     });
+//   taskPool.add(task);
+// }
+
+module.exports = TaskPool;
