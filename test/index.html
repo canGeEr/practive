@@ -6,22 +6,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
-    .float {
-      float: left;
+    body {
+      margin: 0;
+    }
+
+    .bottom,
+    .top {
       height: 200px;
       width: 200px;
+    }
+
+    .top {
       background-color: red;
+    }
+
+    .bottom {
+      position: absolute;
+      background-color: aqua;
+      top: 0;
     }
   </style>
 </head>
 
 <body>
-  <div class="float"></div>
+  <div class="top"></div>
+  <div class="bottom"></div>
   <div>
     Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero consectetur iusto doloribus nisi commodi. Unde, sit,
     error eum labore reprehenderit rerum atque vero delectus, quibusdam voluptatem consequuntur incidunt esse nemo.
   </div>
 
+  <script>
+    const topEle = document.getElementsByClassName('top')[0];
+    const bottomEle = document.getElementsByClassName('bottom')[0];
+
+    topEle.addEventListener('click', () => {
+      console.log(this, 'top点击了')
+    })
+    bottomEle.addEventListener('click', () => {
+      console.log(this, 'bottom点击了')
+    })
+
+  </script>
 </body>
 
 </html>
