@@ -37,16 +37,50 @@
   </div>
 
   <script>
-    const topEle = document.getElementsByClassName('top')[0];
-    const bottomEle = document.getElementsByClassName('bottom')[0];
+    function jsonP(url, params, options = {}) {
+      const { onSuccess, onFail } = options;
+      const callbackName = `jsonp_${new Date().getTime()}`;
+      url = generateUrl(url, {
+        ...params,
+        callbackName,
+      });
+      const script = document.createElement("script");
+      script.type = "text/javascript";
+      script.async = true;
+      script.src = url;
+      // 挂载回调函数到window上
+      Object.defineProperty(window, callbackName, {
+        value: (res) => {
+          onSuccess?.(res);
+          clear();
+        },
+        writable: false,
+        enumerable: false,
+        configurable: true,
+      });
+      script.onerror = function () {
+        onFail?.("error");
+        clear();
+      };
+      // 插入开始生效
+      document.body.appendChild(script);
 
-    topEle.addEventListener('click', () => {
-      console.log(this, 'top点击了')
-    })
-    bottomEle.addEventListener('click', () => {
-      console.log(this, 'bottom点击了')
-    })
+      function clear() {
+        document.body.removeChild(script);
+        delete window[callbackName];
+      }
+    }
 
+    function generateUrl(url, params) {
+      const urlParser = new URL(url);
+      const { searchParams } = urlParser;
+      for (let key of Object.keys(params)) {
+        searchParams.append(key, params[key]);
+      }
+      return urlParser.toString();
+    }
+
+    jsonP('https://www.baidu.com')
   </script>
 </body>
 
