@@ -1,5 +1,5 @@
 const { isObject, getInstanceConstructor } = require("../utils/isObject");
-const test = require("../../树/深度遍历和广度遍历/test.json");
+// const test = require("../../树/深度遍历和广度遍历/test.json");
 
 function deepClone(obj, cache = new Map()) {
   // 非对象直接返回
@@ -10,35 +10,47 @@ function deepClone(obj, cache = new Map()) {
   if (cache.has(obj)) {
     return cache.get(obj);
   }
-  let copy = Object.create(Object.getPrototypeOf(obj));
+  let copy = null;
   // 获取对应的构造函数
-  const Constructor = getInstanceConstructor(obj);
-  if (Constructor === RegExp) {
-    copy = new RegExp(obj);
-  } else if (Constructor === Date) {
-    copy = new Date(obj);
+  const Constructor = obj.constructor;
+  if ([RegExp, Date, Map, Set].includes(Constructor)) {
+    copy = new Constructor(obj);
   } else if (Constructor === Array) {
-    copy = new Array(obj.length);
+    copy = new Array();
+  } else {
+    copy = Object.create(Object.getPrototypeOf(obj));
   }
   cache.set(obj, copy);
   // 如何拷贝函数
   Reflect.ownKeys(obj).map((key) => {
     const descriptor = Object.getOwnPropertyDescriptor(obj, key);
+    const { enumerable, configurable } = descriptor;
     Object.defineProperty(copy, key, {
       writable: true,
-      enumerable: true,
-      configurable: true,
+      enumerable,
+      configurable,
       value: deepClone(obj[key], cache),
-      ...descriptor,
     });
   });
 
   return copy;
 }
 
-console.log(
-  test.map((item) => {
-    const result = deepClone(item);
-    return result;
-  })
-);
+// const test = [
+//   {
+//     a: new Map([[0, 1]]),
+//   },
+// ];
+
+// test[0].b = test[0];
+
+// console.log(
+//   test.map((item) => {
+//     const result = deepClone(item);
+//     console.log(result, item);
+//     result.cicle = item;
+//     return result;
+//   })
+// );
+
+module.exports = deepClone;
