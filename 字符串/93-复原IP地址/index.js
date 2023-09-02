@@ -14,23 +14,23 @@ function restoreIpAddresses(s) {
    * @returns
    */
   function lookBack(begin, arr) {
-    // 到结尾刚好分成四段的
-    if (arr.length === BASE_GAP && begin === length) {
-      return ans.push(arr.join("."));
-    }
     // 扫描超出长度
-    if (begin >= length) return;
-    for (let i = begin; i < length; i++) {
+    if (begin >= length) {
+      // 到结尾刚好分成四段的
+      if (arr.length === BASE_GAP && begin === length) {
+        ans.push(arr.join("."));
+      }
+      return;
+    }
+    // 最长也只是三次
+    for (let i = 0; i < 3; i++) {
+      const end = begin + i;
+      const iStr = s.substring(begin, end + 1);
       // 从begin到i的字符串
-      const iStr = s.substring(begin, i + 1);
-      const iStrNub = Number(iStr);
-      // 转成数字转回来一致，并且小于255
-      if (String(iStrNub) === iStr && iStrNub <= 255) {
+      if (isIpInteger(iStr)) {
         arr.push(iStr);
-        lookBack(i + 1, arr);
+        lookBack(end + 1, arr);
         arr.pop();
-      } else {
-        break;
       }
     }
   }
@@ -48,26 +48,27 @@ function restoreIpAddresses(s) {
  * @param {string} s
  */
 function restoreIpAddresses(s) {
-  // const length = s.length;
-  // // 当前是求dp[length]
-  // const dp = new Array(length + 1).fill(0);
-  // // dp 3看成3份，每一个数字是否能组成一份
-  // dp[3] = Number(s.substring(0, 3).split("").every(isIpInteger));
-  // // dp[2] =
-  // for (let i = 4; i <= length; i++) {
-  //   // 只使用一个字符
-  //   if (isIpInteger(s[i - 1]) & (i - 2 >= 2)) {
-  //     dp[i] += dp[i - 1];
-  //   }
-  //   // 为什么i有两次判断，因为截取之后，需要判断前面的数字是否还能分成 3份，因此必须大禹3
-  //   if (i >= 2 && isIpInteger(s.substring(i - 2, i)) && i - 2 >= 3) {
-  //     dp[i] += dp[i - 2];
-  //   }
-  //   if (i >= 3 && isIpInteger(s.substring(i - 3, i)) && i - 3 >= 3) {
-  //     dp[i] += dp[i - 3];
-  //   }
-  // }
-  // return dp;
+  const length = s.length;
+  // 当前是求dp[length]
+  const dp = new Array(length + 1).fill(0);
+  // dp 3看成3份，每一个数字是否能组成一份
+  dp[4] = Number(s.substring(0, 3).split("").every(isIpInteger));
+
+  for (let i = 5; i <= length; i++) {
+    // 感觉这里的加法有问题
+    // 只使用一个字符
+    if (isIpInteger(s[i - 1])) {
+      dp[i] += dp[i - 1];
+    }
+    // 为什么i有两次判断，因为截取之后，需要判断前面的数字是否还能分成 3份，因此必须大禹3
+    if (i >= 2 && isIpInteger(s.substring(i - 2, i)) && i - 2 >= 3) {
+      dp[i] += dp[i - 2];
+    }
+    if (i >= 3 && isIpInteger(s.substring(i - 3, i)) && i - 3 >= 3) {
+      dp[i] += dp[i - 3];
+    }
+  }
+  return dp;
   // return dp[length];
 }
 
@@ -77,7 +78,7 @@ function isIpInteger(str) {
 }
 
 const test = [
-  // "25525511135",
+  "25525511135",
   // "0000",
   "101023",
   "d000",
