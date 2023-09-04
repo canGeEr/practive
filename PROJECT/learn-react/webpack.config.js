@@ -21,9 +21,9 @@ module.exports = {
               [
                 "@babel/preset-react",
                 // 自动引入React
-                {
-                  runtime: "automatic",
-                },
+                // {
+                //   runtime: "automatic",
+                // },
               ],
             ],
             plugins: ["react-refresh/babel"],
