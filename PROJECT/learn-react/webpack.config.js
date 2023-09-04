@@ -7,6 +7,7 @@ const rootPath = __dirname;
 module.exports = {
   mode: "development",
   entry: resolve(rootPath, "./src/index.js"),
+  devtool: "source-map",
   module: {
     // 配置loader，翻译
     rules: [
@@ -16,7 +17,15 @@ module.exports = {
           loader: "babel-loader",
           // 预设解析react
           options: {
-            presets: ["@babel/preset-react"],
+            presets: [
+              [
+                "@babel/preset-react",
+                // 自动引入React
+                {
+                  runtime: "automatic",
+                },
+              ],
+            ],
             plugins: ["react-refresh/babel"],
           },
         },
