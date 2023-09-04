@@ -17,3 +17,5 @@ function DOMContentLoaded() {
 }
 
 window.addEventListener("DOMContentLoaded", DOMContentLoaded);
+
+// 实现一个react需要什么？，能执行react的环境js，能够识别jsx的语法label
