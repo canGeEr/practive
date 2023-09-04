@@ -1,0 +1,38 @@
+const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const { resolve } = require("path");
+
+const rootPath = __dirname;
+
+module.exports = {
+  mode: "development",
+  entry: resolve(rootPath, "./src/index.js"),
+  module: {
+    // 配置loader，翻译
+    rules: [
+      {
+        test: /.(js|jsx)$/,
+        use: {
+          loader: "babel-loader",
+          // 预设解析react
+          options: {
+            presets: ["@babel/preset-react"],
+            plugins: ["react-refresh/babel"],
+          },
+        },
+      },
+    ],
+  },
+  plugins: [
+    new ReactRefreshWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      template: resolve(rootPath, "./index.html"),
+    }),
+  ],
+  resolve: {
+    extensions: [".js", ".jsx"],
+  },
+  devServer: {
+    port: 3000,
+  },
+};
