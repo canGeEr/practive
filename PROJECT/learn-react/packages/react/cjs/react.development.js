@@ -863,8 +863,6 @@ if (process.env.NODE_ENV !== "production") {
      */
 
     function createElement(type, config, children) {
-      console.log("dsadsa");
-      debugger;
       var propName; // Reserved names are extracted
 
       var props = {};

@@ -26545,6 +26545,7 @@ function workLoopConcurrent() {
 }
 
 function performUnitOfWork(unitOfWork) {
+  // debugger;
   // The current, flushed, state of this fiber is the alternate. Ideally
   // nothing should rely on this, but relying on it here means that we don't
   // need an additional field on the work in progress.
