@@ -10,21 +10,10 @@ function flattenObject(variable, flatObject = {}, preKeyArr = [], cache = new Ma
     return 
   }
   cache.set(variable, true);
-  const variableType = Array.isArray(variable);
   // 继续去打平下一个key
   Reflect.ownKeys(variable).forEach(key => {
     const value = variable[key];
-    // 如果是数组
-    if(variableType) {
-      if(key === 'length') return
-      if(isNaN(Number(key))) {
-        preKeyArr.push(key);
-      } else {
-        preKeyArr.push(`[${key}]`)
-      }
-    } else {
-      preKeyArr.push(key);
-    }
+    preKeyArr.push(key);
     if(isObject(value)) {
       flattenObject(value, flatObject, preKeyArr, cache);
     } else {
