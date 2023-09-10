@@ -1,28 +1,25 @@
 const { instanceOf } = require("./instanceOf");
 
 // 组合
-// function Animal(name) {
-//   this.name = name;
-// }
+function Animal(type) {
+  this.type = type
+}
 
-// function Dog(name, greet) {
-//   Animal.call(this, name);
-//   this.greet = greet;
-// }
+function Dog(type) {
+  Animal.call(this, type);
+  this.eat = function() {
+    console.log('Dog eat')
+  }
+}
 
-// 组合式 关联原型链
-// Dog.prototype = new Animal();
-// Dog.prototype.construct = Dog;
-
-// 组合寄生
-// Dog.prototype = Object.create(Animal.prototype, {
-//   construct: {
-//     value: Dog,
-//     enumerable: false,
-//     writable: true,
-//     configurable: true,
-//   },
-// });
+Dog.prototype = Object.create(Animal.prototype, {
+  constructor: {
+    value: Dog,
+    enumerable: false,
+    writeable: true,
+    configurable: true,
+  }
+});
 
 class Animal {
   name;
