@@ -7,48 +7,63 @@ class EventEmit {
       this.cache.set(name, []);
     }
     this.cache.get(name).push(callback);
-    return () => this.delete(name, callback);
+    return this;
   }
-  delete(name, callback) {
+
+  off(name, callback) {
     const callbackList = this.cache.get(name);
     if (!callbackList?.length) return;
-    const callbackIndex = callbackList.find((item) => callback === item);
+    const callbackIndex = callbackList.findIndex((item) => callback === item);
     if (callbackIndex === -1) return;
-    // 替换callback位置为空
-    callbackList[callbackIndex] = undefined;
+    callbackList.splice(callbackIndex, 1);
   }
+
   once(name, callback) {
-    const clearFun = this.on(name, () => {
-      callback();
-      clearFun();
-    });
-    return clearFun;
+    const wrapCallback = (...args) => {
+      callback(...args);
+      off.call(this);
+    }
+
+    function off() {
+      this.off(name, wrapCallback);
+    }
+
+    this.on(name, wrapCallback);
+    return off;
   }
-  emit(name) {
+
+  emit(name, ...args) {
     const callbackList = this.cache.get(name);
     if (!callbackList?.length) return;
-    // 注意，可能边执行的时候边背删除了
-    callbackList.forEach((callback) => callback?.());
-    this.cache.set(name, callbackList.filter(Boolean));
+    callbackList.forEach((callback) => callback(...args));
   }
 }
 
 const eventEmit = new EventEmit();
 
-const clearFirst = eventEmit.on("fuck", () => {
+eventEmit.on("fuck", first1);
+
+function first1() {
   console.log("first1");
-});
+}
 
-eventEmit.once("fuck", () => {
-  console.log("first once");
-  clearFirst();
-  clearSecond();
-});
-
-const clearSecond = eventEmit.on("fuck", () => {
+function first2() {
+  eventEmit.off('fuck', first1)
   console.log("first2");
-});
+}
+
+function first3() {
+  console.log("first3");
+}
+
+function first4() {
+  console.log("first4");
+}
+
+eventEmit.once("fuck", first2);
+
+eventEmit.on("fuck", first3);
+eventEmit.on("fuck", first4);
 
 eventEmit.emit("fuck");
-
 eventEmit.emit("fuck");
