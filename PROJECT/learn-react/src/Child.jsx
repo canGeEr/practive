@@ -1,5 +1,7 @@
-import { useState, useRef } from 'react';
-import * as React from 'react'
+// import { useState, useRef } from 'react';
+
+import * as React from '../packages/react'
+const { useState, useRef } = React;
 import useCountDown from './hooks/useCountDown'
 
 function Child() {
