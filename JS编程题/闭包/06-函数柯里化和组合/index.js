@@ -19,13 +19,16 @@ function compose(...funArr) {
 }
 
 function compose(...funArr) {
-  return function loop(...args) {
-    // 第一个函数拿出来
-    const callback = funArr.shift();
-    if (!funArr.length) {
-      return callback(...args);
+  return (...args) => {
+    function loop(begin) {
+      if (begin >= funArr.length) {
+        return args;
+      }
+      // 拿到当前的函数
+      const callback = funArr[begin];
+      return [callback(...loop(begin + 1))];
     }
-    return callback(loop(...args));
+    return loop(0);
   };
 }
 const First = (...argus) => {
