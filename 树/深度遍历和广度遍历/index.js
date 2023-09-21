@@ -1,29 +1,3 @@
-// depth first search 期望输出 root a d e b f c
-function dfs(root, path = "") {
-  if (!path) {
-    path = root.value;
-  } else {
-    path += ` => ${root.value}`;
-  }
-  console.log(root.value);
-  // if (!root.children) {
-  //   console.log(path);
-  //   return;
-  // }
-  root.children?.forEach((item) => dfs(item, path));
-}
-
-// breath first search 期望输出 root a b c d e f
-function bfs(root) {
-  const queue = [root];
-  while (queue.length) {
-    const node = queue.shift();
-    // 访问
-    console.log(node.value);
-    node.children?.forEach((item) => queue.push(item));
-  }
-}
-
 const test = {
   value: "root",
   children: [
@@ -51,6 +25,25 @@ const test = {
     },
   ],
 };
-// 标准输出新婚下
 
-dfsByStack(test);
+function dfsByStack(root) {
+  let current = root;
+  const stack = [];
+  const ans = [];
+  while (stack.length || current) {
+    // 一直往左
+    while (current) {
+      ans.push(current.value);
+      stack.push(current);
+      // 访问左子树
+      current = current.children?.[0];
+    }
+    // 父节点弹出
+    current = stack.pop();
+    // 遍历右子树
+    current = current.children?.[1];
+  }
+  return ans;
+}
+
+console.log(dfsByStack(test));

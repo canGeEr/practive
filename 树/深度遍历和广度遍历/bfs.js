@@ -10,7 +10,6 @@ function bfs(root) {
     path.push(node.value);
     node.children?.forEach((item) => queue.push(item));
   }
-
   return path;
 }
 
