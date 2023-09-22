@@ -1,24 +1,22 @@
-const o = (function (){
+const o = (function () {
   const obj = {
-      a:1,
-      b:2
-  }
+    a: 1,
+    b: 2,
+  };
 
-  Object.freeze(obj)
+  Object.freeze(obj);
 
   return {
-      get(k){
-          return obj[k]
-      }
-  }
+    get(k) {
+      return obj[k];
+    },
+  };
 })();
 
-
-Object.defineProperty(Object.prototype, 'temp', {
+Object.defineProperty(Object.prototype, "temp", {
   get() {
-    return this
-  }
-})
+    return this;
+  },
+});
 
-
-console.log(o.get('temp'))
+console.log(o.get("temp"));

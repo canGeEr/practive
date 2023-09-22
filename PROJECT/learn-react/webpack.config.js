@@ -26,7 +26,8 @@ module.exports = {
                 // },
               ],
             ],
-            plugins: ["react-refresh/babel"],
+            // "react-refresh/babel",
+            plugins: ["@babel/plugin-syntax-decorators"],
           },
         },
       },
@@ -51,9 +52,9 @@ module.exports = {
           "Access-Control-Allow-Headers": "X-Requested-With,Content-Type",
           "Access-Control-Allow-Methods": "PUT,POST,GET,DELETE,OPTIONS",
         });
-        console.log(req.url, '发起七个球')
+        console.log(req.url, "发起七个球");
         next();
-      })
+      });
       return middlewares;
     },
   },
