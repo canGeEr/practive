@@ -35,6 +35,21 @@ var calculate = function (s) {
   const length = s.length;
   while (start < length) {
     const char = s[start];
+    if (char === "(") {
+      operatorStack.push("(");
+    }
+    // 把当前所有的内容全部计算一遍
+    if (char === ")") {
+      while (operatorStack.length) {
+        const lastOperator = operatorStack.at(-1);
+        if (lastOperator === "(") {
+          operatorStack.pop();
+          break;
+        } else {
+          calc(numberStack, operatorStack);
+        }
+      }
+    }
     // 如果是数字
     if (isNumber(char)) {
       const result = getNumber(s, start);
@@ -79,13 +94,17 @@ function calc(numberStack, operatorStack) {
 }
 
 const test = [
-  "3+2*2",
-  " 3/2 ",
-  " 3+5 / 2 ",
-  "1-1+1",
-  "14/3*2",
-  "1+2*5/3+6/4*2",
-  ,
+  "(3+2)*2",
+  // " 3/2 ",
+  // " 3+5 / 2 ",
+  // "1-1+1",
+  // "14/3*2",
+  // "1+2*5/3+6/4*2",
 ];
 
 console.log(test.map(calculate));
+
+/**
+ * todo
+ * 考虑数字是否存在-号或者+号
+ */
