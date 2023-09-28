@@ -43,20 +43,23 @@ var calculate = function (s) {
     }
     // 是操作符号
     if (operatePriority[char] !== undefined) {
-      const lastTopOperator = operatorStack.at(-1);
       // 后续的优先级没有前面的优先级大或者等于，需要先把前面的计算完成
-      if (
-        lastTopOperator &&
-        operatePriority[char] <= operatePriority[lastTopOperator]
-      ) {
-        calc(numberStack, numberStack);
-      } else {
-        operatorStack.push(char);
+      while (operatorStack.length) {
+        const lastOperator = operatorStack.at(-1);
+        // 栈中的优先级 大于/等于 当前优先级
+        if (operatePriority[lastOperator] >= operatePriority[char]) {
+          calc(numberStack, operatorStack);
+        } else {
+          break;
+        }
       }
+      operatorStack.push(char);
     }
     start += 1;
   }
-  calc(numberStack, operatorStack);
+  while (operatorStack.length) {
+    calc(numberStack, operatorStack);
+  }
   return numberStack.pop();
 };
 
@@ -66,18 +69,23 @@ var calculate = function (s) {
  * @param {string []} operatorStack
  */
 function calc(numberStack, operatorStack) {
-  while (operatorStack.length) {
-    const operator = operatorStack.pop();
-    const number2 = numberStack.pop();
-    const number1 = numberStack.pop();
-    const result = operateAction[operator](number1, number2);
-    numberStack.push(result);
-  }
+  // 取出一个操作符
+  const operator = operatorStack.pop();
+  // 取出两个数字
+  const number2 = numberStack.pop();
+  const number1 = numberStack.pop();
+  const result = operateAction[operator](number1, number2);
+  numberStack.push(Math.floor(result));
 }
 
 const test = [
-  // "3+2*2", " 3/2 ", " 3+5 / 2 ",
+  "3+2*2",
+  " 3/2 ",
+  " 3+5 / 2 ",
   "1-1+1",
+  "14/3*2",
+  "1+2*5/3+6/4*2",
+  ,
 ];
 
 console.log(test.map(calculate));
