@@ -14,4 +14,4 @@ async function entry() {
   return files.map(domParse);
 }
 
-console.log(entry());
+entry().then(console.log);

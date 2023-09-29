@@ -1,123 +1,149 @@
+const { Element } = require("./packages/element");
+
+/**
+ *
+ * @param {string} char
+ */
+function isText(char) {
+  return char && !isTagToken(char);
+}
+
+/**
+ *
+ * @param {string} s
+ * @param {number} start
+ */
+function getTextToken(s, start) {
+  const textCharArr = [s[start]];
+  while (!isTagToken(s[start + 1])) {
+    textCharArr.push(s[start + 1]);
+    start += 1;
+  }
+
+  return { value: textCharArr.join(""), start };
+}
+
+/**
+ *
+ * @param {string} char
+ */
+function isTagToken(char) {
+  return char && char === "<";
+}
+
+const attributeRegexp = /(\w+)(=\"(.*)\")?/;
+/**
+ *
+ * @param {string} s
+ * @param {number} start
+ */
+function getAttribute(s, start) {
+  const charArr = [s[start]];
+  // 假设都是 空格 / >
+  while (![">", " "].includes(s[start + 1])) {
+    charArr.push(s[start + 1]);
+    start += 1;
+  }
+  const attributeStr = charArr.join("");
+  // 匹配结果
+  const [, name, , value] = attributeStr.match(attributeRegexp);
+  return { name, value, start };
+}
+
+/**
+ *
+ * @param {string} s
+ * @param {number} start
+ */
+function getTagToken(s, start) {
+  const nextChar = s[start + 1];
+  let isClose = false;
+  // 当前是闭合标签，并且跳过闭合标签
+  if (nextChar === "/") {
+    isClose = true;
+    start += 1;
+  }
+  const tagTokenCharArr = [];
+  // 收集标签直到碰到 ' ' | '>'
+  while (![" ", ">"].includes(s[start + 1])) {
+    tagTokenCharArr.push(s[start + 1]);
+    start += 1;
+  }
+
+  // 当前html标签有语法错误
+  if (!tagTokenCharArr.length) {
+    throw `在${start - 1}处标签有语法错误，找不到标签名称`;
+  }
+
+  const tagToken = tagTokenCharArr.join("");
+
+  // 闭合标签识别完标签名称直接退出
+  if (isClose) {
+    while (s[start + 1] !== ">") {
+      start += 1;
+    }
+    return { value: tagToken, start, isClose };
+  }
+
+  start += 1;
+  const attributes = {};
+  // 非闭合标签需要继续识别属性，直到遇到 >
+  while (s[start] !== ">") {
+    const char = s[start];
+    // 如果存在的话，一直找打
+    if (char) {
+      const result = getAttribute(s, start);
+      attributes[result.name] = result.value;
+      // 这里需要等待收集属性
+      start = result.start;
+    }
+    start += 1;
+  }
+
+  return { value: tagToken, start, isClose, attributes };
+}
+
 /**
  *
  * @param {string} s
  */
-function domParse(s) {}
-
-class Element {
-  constructor(tag, ...children) {
-    this.tag = tag;
-    this.children = children || [];
-  }
-
-  addChild(element) {
-    this.children.push(element);
-  }
-}
-
-function createElementByToken(token) {
-  return new Element(token);
-}
-
-/**
- *
- * @param {string} domStr
- * @returns
- */
-function parse(domStr) {
-  const tokenStack = [""];
+function domParse(s) {
+  let start = 0;
+  const length = s.length;
   const domStack = [new Element("root")];
-  let begin = 0;
-  const { length } = domStr;
-  // 开始解析收集
-  while (begin < length) {
-    const char = domStr[begin];
-    // 开标签，说明需要开始匹配了
-    if (char === "<") {
-      const { tagToken, isClose } = getTagToken();
-      dealTagToken(tagToken, isClose);
-      begin += 1;
-      continue;
-    }
-    const textToken = getTextToken(char);
-    dealTextToken(textToken);
-    begin += 1;
-  }
-
-  function getTagToken() {
-    const tokenCharArr = [];
-    const attributesArr = [];
-    let isClose = false;
-    // 下一个字符是否安全
-    while (domStr[begin + 1] !== ">") {
-      if (begin >= length) throw "标签<未匹配到>";
-      begin += 1;
-      const nextChar = domStr[begin];
-      // 如果是空字符直接过滤
-      if (!nextChar) continue;
-      // 如果发现是闭合标签跳过不收集
-      if (nextChar === "/") {
-        isClose = true;
-        continue;
-      }
-      tokenCharArr.push(nextChar);
-    }
-    // 跳过 > 符号
-    begin += 1;
-    // 前后的空字符串去掉
-    const tagToken = tokenCharArr.join("").trim();
-    return { tagToken, isClose };
-  }
-
-  /**
-   *
-   * @param {string} char
-   */
-  function getTextToken(char) {
-    const textTokenArr = [char];
-    // 只要不遇到开箭头
-    while (domStr[begin + 1] !== "<" && begin < length) {
-      begin += 1;
-      const nextChar = domStr[begin];
-      textTokenArr.push(nextChar);
-    }
-    return textTokenArr.join("").trim();
-  }
-
-  /**
-   *
-   * @param {string} tagToken
-   * @param {boolean} isClose
-   */
-  function dealTagToken(tagToken, isClose) {
-    // 上一级的root
-    const root = domStack.at(-1);
-    if (isClose) {
-      // 说明当前是正常弹出
-      if (tagToken === tokenStack.at(-1)) {
-        tokenStack.pop();
+  while (start < length) {
+    const char = s[start];
+    // 标签
+    if (isTagToken(char)) {
+      const { value, isClose, attributes } = getTagToken(s, start);
+      // 当前是闭合标签
+      if (isClose) {
+        const topTagToken = domStack.at(-1).tag;
+        if (topTagToken !== value) {
+          throw "闭合标签未对应开始标签";
+        }
         domStack.pop();
-        return;
       } else {
-        throw "dom标签匹配失败";
+        const topDom = domStack.at(-1);
+        const currentDom = new Element(value, attributes);
+        topDom.addChild(currentDom);
+        domStack.push(currentDom);
       }
+      start = result.start;
     }
-    tokenStack.push(tagToken);
-    const element = createElementByToken(tagToken);
-    domStack.push(element);
-    // 新创建的element加入dom树
-    if (root) {
-      root.addChild(element);
+
+    // 文字
+    if (isText(char)) {
+      const { value } = getTextToken(s, start);
+      if (value) {
+        const topDom = domStack.at(-1);
+        topDom.addChild(value);
+      }
+      start = result.start;
     }
+    start += 1;
   }
-
-  function dealTextToken(textToken) {
-    // 上一级的root
-    const root = domStack.at(-1);
-    root.addChild(textToken);
-  }
-
-  return domStack[0];
+  return domStack.at(-1);
 }
 
 module.exports = {

@@ -1,0 +1,35 @@
+// {
+//   "workbench.iconTheme": "vscode-icons",
+//   // DotENV 高亮
+//   "vsicons.dontShowNewVersionMessage": true,
+//   "explorer.confirmDelete": false,
+//   "editor.formatOnSave": false,
+//   "editor.codeActionsOnSave": {
+//     // 自动保存的行为的时候进行eslint插件检查
+//     "source.fixAll.eslint": false,
+//     "source.fixAll.stylelint": false,
+//     "source.fixAll.prettier": false
+//   },
+//   "editor.tabSize": 2,
+//   "terminal.integrated.profiles.windows": {
+//     "PowerShell": {
+//       "source": "PowerShell",
+//       "icon": "terminal-powershell"
+//     },
+//     "Command Prompt": {
+//       "path": [
+//         "${env:windir}\\Sysnative\\cmd.exe",
+//         "${env:windir}\\System32\\cmd.exe"
+//       ],
+//       "args": [],
+//       "icon": "terminal-cmd"
+//     },
+//     "Git Bush": {
+//       "path": "D:\\App\\Git\\bin\\bash.exe"
+//     }
+//   },
+//   "terminal.integrated.defaultProfile.windows": "Git Bush",
+//   "cSpell.userWords": [
+//     "antd"
+//   ],
+// }
