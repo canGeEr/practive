@@ -11,7 +11,13 @@ async function entry() {
       fs.readFile(path.resolve(dataDir, filename), { encoding: "utf-8" })
     )
   );
-  return files.map(domParse);
+  return files.map((res) => Promise.resolve(res).then(domParse));
 }
 
-entry().then(console.log);
+entry()
+  .then((res) => {
+    console.log(res);
+  })
+  .catch((error) => {
+    console.log(error);
+  });

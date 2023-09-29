@@ -5,7 +5,7 @@ const { Element } = require("./packages/element");
  * @param {string} char
  */
 function isText(char) {
-  return char && !isTagToken(char);
+  return char && !isTagToken(char) && char !== " ";
 }
 
 /**
@@ -20,7 +20,7 @@ function getTextToken(s, start) {
     start += 1;
   }
 
-  return { value: textCharArr.join(""), start };
+  return { value: textCharArr.join("").trimEnd(), start };
 }
 
 /**
@@ -77,15 +77,16 @@ function getTagToken(s, start) {
 
   const tagToken = tagTokenCharArr.join("");
 
+  start += 1;
+
   // 闭合标签识别完标签名称直接退出
   if (isClose) {
-    while (s[start + 1] !== ">") {
+    while (s[start] !== ">") {
       start += 1;
     }
     return { value: tagToken, start, isClose };
   }
 
-  start += 1;
   const attributes = {};
   // 非闭合标签需要继续识别属性，直到遇到 >
   while (s[start] !== ">") {
@@ -115,7 +116,8 @@ function domParse(s) {
     const char = s[start];
     // 标签
     if (isTagToken(char)) {
-      const { value, isClose, attributes } = getTagToken(s, start);
+      const result = getTagToken(s, start);
+      const { value, isClose, attributes } = result;
       // 当前是闭合标签
       if (isClose) {
         const topTagToken = domStack.at(-1).tag;
@@ -134,7 +136,8 @@ function domParse(s) {
 
     // 文字
     if (isText(char)) {
-      const { value } = getTextToken(s, start);
+      const result = getTextToken(s, start);
+      const { value } = result;
       if (value) {
         const topDom = domStack.at(-1);
         topDom.addChild(value);
@@ -143,7 +146,7 @@ function domParse(s) {
     }
     start += 1;
   }
-  return domStack.at(-1);
+  return domStack.at(-1).children;
 }
 
 module.exports = {
