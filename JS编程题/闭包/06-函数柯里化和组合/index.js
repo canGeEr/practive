@@ -1,36 +1,41 @@
-function curry(fn, ...initArgs) {
-  const length = fn.length;
-  return function (...args) {
-    const currentArgs = initArgs.concat(args);
-    if (currentArgs.length === length) {
-      return fn(...currentArgs);
+function curry(callback, ...outerArgs) {
+  return function (...innerArgs) {
+    const args = innerArgs.concat(outerArgs);
+    if (callback.length <= args.length) {
+      return callback.apply(this, args);
     }
-    return curry(fn, ...currentArgs);
+    return curry(callback, ...args);
   };
 }
 
+/**
+ *
+ * @param  {...function} funArr
+ */
 function compose(...funArr) {
-  return (...args) => {
-    const [result] = funArr.reduceRight((params, callback) => {
-      return [callback.apply(null, params)];
+  return function (...args) {
+    return funArr.reduceRight((lastArgs, callback) => {
+      return [callback.apply(this, lastArgs)];
     }, args);
-    return result;
   };
 }
 
+/**
+ *
+ * @param  {...function} funArr
+ */
 function compose(...funArr) {
-  return (...args) => {
+  return function (...args) {
+    const length = funArr.length;
     function loop(begin) {
-      if (begin >= funArr.length) {
-        return args;
-      }
-      // 拿到当前的函数
+      if (begin >= length) return args;
       const callback = funArr[begin];
-      return [callback(...loop(begin + 1))];
+      return callback.call(this, loop(begin + 1));
     }
     return loop(0);
   };
 }
+
 const First = (...argus) => {
   console.log(argus);
   console.log("First");
@@ -49,3 +54,4 @@ console.log({
 });
 
 compose(Third, Second, First)(1, 2, 3);
+compose(First, Second, Third)(1, 2, 3);
