@@ -50,3 +50,7 @@ const test = [
 ];
 
 console.log(test.map(spiralOrder));
+
+/**
+ * URL => protocol 协议 + host（hostname / ip + port） + pathname + hash + search
+ */
