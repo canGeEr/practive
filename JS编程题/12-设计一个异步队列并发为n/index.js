@@ -3,19 +3,22 @@ const sleep = require("./../utils/sleep");
 class TaskPool {
   // 最大同时执行的任务
   max;
+  // 当前剩余任务
+  rest;
   // 任务列表
   taskList;
   constructor(max = 10) {
     this.max = max;
+    this.rest = this.max;
     // 存储还在执行的任务列表
     this.taskList = [];
   }
   add(asyncTask) {
-    if (this.max > 0) {
-      this.max--;
+    if (this.rest > 0) {
+      this.rest--;
       // 执行完成之后释放资源
       asyncTask().finally(() => {
-        this.max++;
+        this.rest++;
         // 每次完成之后，检查是否有任务需要继续进行
         this.checkAsyncTask();
       });
