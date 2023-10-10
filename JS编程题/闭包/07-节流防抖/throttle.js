@@ -1,11 +1,21 @@
-// 调用一次之后，其他的调用都得看时间，不得超过
+/**
+ *
+ * @param {function} callback
+ * @param {number} time
+ */
 function throttle(callback, time) {
-  let start = new Date();
+  let startTime = new Date();
   return function (...args) {
-    const end = new Date();
-    if (end - start >= time) {
-      start = end;
-      callback(...args);
+    const endTime = new Date();
+    if (endTime - startTime >= time) {
+      callback.apply(this, args);
+      startTime = endTime;
     }
   };
 }
+
+// 一种是时间控制，记录上一次的调用时间
+
+module.exports = {
+  throttle,
+};
