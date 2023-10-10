@@ -8,43 +8,43 @@ module.exports = {
   mode: "development",
   entry: resolve(rootPath, "./src/index.js"),
   devtool: "source-map",
-  module: {
-    // 配置loader，翻译
-    rules: [
-      {
-        test: /.(js|jsx)$/,
-        use: {
-          loader: "babel-loader",
-          // 预设解析react
-          options: {
-            presets: [
-              [
-                "@babel/preset-react",
-                // 自动引入React
-                // {
-                //   runtime: "automatic",
-                // },
-              ],
-            ],
+  // module: {
+  //   // 配置loader，翻译
+  //   rules: [
+  //     {
+  //       test: /.(js|jsx)$/,
+  //       use: {
+  //         loader: "babel-loader",
+  //         // 预设解析react
+  //         options: {
+  //           presets: [
+  //             [
+  //               "@babel/preset-react",
+  //               // 自动引入React
+  //               // {
+  //               //   runtime: "automatic",
+  //               // },
+  //             ],
+  //           ],
 
-            plugins: [
-              ["@babel/plugin-proposal-decorators", { legacy: true }],
-              "react-refresh/babel",
-            ],
-          },
-        },
-      },
-    ],
-  },
+  //           plugins: [
+  //             ["@babel/plugin-proposal-decorators", { legacy: true }],
+  //             "react-refresh/babel",
+  //           ],
+  //         },
+  //       },
+  //     },
+  //   ],
+  // },
   plugins: [
-    new ReactRefreshWebpackPlugin(),
+    // new ReactRefreshWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: resolve(rootPath, "./index.html"),
     }),
   ],
-  resolve: {
-    extensions: [".js", ".jsx"],
-  },
+  // resolve: {
+  //   extensions: [".js", ".jsx"],
+  // },
   devServer: {
     port: 3000,
     // setupMiddlewares: (middlewares, devServer) => {
