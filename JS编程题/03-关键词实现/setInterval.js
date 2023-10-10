@@ -28,19 +28,19 @@ const manage = customSetInterval(() => {
 }, 1000);
 
 // v2
-function setInterval(callback, time) {
-  const now = Date.now;
-  let startTime = endTime,
-    endTime = now();
-  const self = this;
-  function loop() {
-    self.timer = requestAnimationFrame(loop);
-    endTime = now();
-    if (endTime - startTime >= time) {
-      startTime = endTime = now();
-      callback();
-    }
-  }
-  self.timer = requestAnimationFrame(loop);
-  return this.timer;
-}
+// function setInterval(callback, time) {
+//   const now = Date.now;
+//   let startTime = endTime,
+//     endTime = now();
+//   const self = this;
+//   function loop() {
+//     self.timer = requestAnimationFrame(loop);
+//     endTime = now();
+//     if (endTime - startTime >= time) {
+//       startTime = endTime = now();
+//       callback();
+//     }
+//   }
+//   self.timer = requestAnimationFrame(loop);
+//   return this.timer;
+// }
