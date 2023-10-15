@@ -13,9 +13,11 @@ const Subscribe = () => {
       <h3>这里是data {data}</h3>
       <ul>
         <li><button onClick={() => {
-          dispatch({action: 'add', payload: 1})
+          dispatch({action: 'add', payload: 4})
         }}>Add</button></li>
-        <li><button>Sub</button></li>
+        <li onClick={() => {
+          dispatch({action: 'sub', payload: 2})
+        }}><button>Sub</button></li>
         <li><button>Multi</button></li>
       </ul>
     </div>
