@@ -1,17 +1,17 @@
 
 import * as React from "react";
+import { StoreProvider, store } from './store/index'
+import Subscribe from './Subscribe'
+import Child from './Child'
 
 function App () {
-  // const [flag, reRender] = useState(false);
-  console.log('当前执行了APP')
+  console.log('App刷新了')
   return (
-    <div>
-      {/* {flag} */}
-      {/* <button onClick={() => {
-        reRender(!flag)
-      }}>修改App</button>
-      <Child /> */}
-    </div>
+    <StoreProvider value={store}>
+      这里是App
+      <Subscribe />
+      <Child />
+    </StoreProvider>
   )
 }
 

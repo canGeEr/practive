@@ -37,28 +37,12 @@ module.exports = {
     ],
   },
   plugins: [
-    // new ReactRefreshWebpackPlugin(),
+    new ReactRefreshWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: resolve(rootPath, "./index.html"),
     }),
   ],
   resolve: {
     extensions: [".js", ".jsx"],
-  },
-  devServer: {
-    port: 3000,
-    // setupMiddlewares: (middlewares, devServer) => {
-    //   devServer.app.use((req, res, next) => {
-    //     res.set({
-    //       "Access-Control-Allow-Credentials": true,
-    //       "Access-Control-Allow-Origin": req.headers.origin || "*",
-    //       "Access-Control-Allow-Headers": "X-Requested-With,Content-Type",
-    //       "Access-Control-Allow-Methods": "PUT,POST,GET,DELETE,OPTIONS",
-    //     });
-    //     console.log(req.url, "发起七个球");
-    //     next();
-    //   });
-    //   return middlewares;
-    // },
   },
 };

@@ -1,11 +1,12 @@
 // import { useState, useRef } from 'react';
 
-import * as React from '../packages/react'
+import * as React from 'react'
 const { useState, useRef } = React;
 import useCountDown from './hooks/useCountDown'
 
 function Child() {
   const { value, start, stop, pause, resume } = useCountDown(10);
+  console.log('Child 刷新了')
   return (
     <div>
       <div>当前计数器: {value}</div>
