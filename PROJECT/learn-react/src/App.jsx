@@ -1,12 +1,8 @@
 
-import * as React from "../packages/react";
-// import { useState, useEffect } from "../packages/react";
-// import * as React from 'react'
-const { useState } = React;
-import Child from './Child'
+import * as React from "react";
 
 function App () {
-  const [flag, reRender] = useState(false);
+  // const [flag, reRender] = useState(false);
   console.log('当前执行了APP')
   return (
     <div>
