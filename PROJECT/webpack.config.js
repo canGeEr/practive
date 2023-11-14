@@ -6,7 +6,7 @@ const rootPath = __dirname;
 
 module.exports = {
   mode: "development",
-  entry: resolve(rootPath, "./src/index.js"),
+  entry: resolve("./src/index.js"),
   devtool: "source-map",
   module: {
     // 配置loader，翻译
@@ -39,7 +39,7 @@ module.exports = {
   plugins: [
     new ReactRefreshWebpackPlugin(),
     new HtmlWebpackPlugin({
-      template: resolve(rootPath, "./index.html"),
+      template: resolve("./index.html"),
     }),
   ],
   resolve: {
