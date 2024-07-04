@@ -1,0 +1,12 @@
+{
+  "name": "inversify",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "start": "ts-node ./inversify.config.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
