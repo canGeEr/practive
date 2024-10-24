@@ -2,12 +2,12 @@ const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin"
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { resolve } = require("path");
 
-const rootPath = __dirname;
+const rootPath = process.cwd();
 
 module.exports = {
   mode: "development",
-  entry: resolve("./src/index.js"),
-  devtool: "source-map",
+  entry: "./src/index.js",
+  devtool: "eval",
   module: {
     // 配置loader，翻译
     rules: [
@@ -26,7 +26,6 @@ module.exports = {
                 // },
               ],
             ],
-
             plugins: [
               ["@babel/plugin-proposal-decorators", { legacy: true }],
               "react-refresh/babel",
@@ -39,7 +38,7 @@ module.exports = {
   plugins: [
     new ReactRefreshWebpackPlugin(),
     new HtmlWebpackPlugin({
-      template: resolve("./index.html"),
+      template: resolve(__dirname, "./index.html"),
     }),
   ],
   resolve: {
