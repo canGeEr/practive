@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npx webpack server -c ./../webpack.config.js"
+    "start": "npx webpack server -c ./../webpack.config.js",
+    "create-random-files": "node ../auto-script/create-random-files.js"
   },
   "author": "",
   "license": "ISC"
